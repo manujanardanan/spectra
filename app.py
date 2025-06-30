@@ -1,10 +1,18 @@
 import streamlit as st
-from PIL import Image
 
 st.set_page_config(page_title="Spectra Agent Builder", layout="wide")
 
 # Sidebar logo
-st.sidebar.image("assets/spectra_logo.png", width=160)
+from pathlib import Path
+import streamlit as st
+
+logo_path = Path("assets/spectra_logo.png")
+
+# Safely skip logo if not present
+if logo_path.is_file():
+    st.sidebar.image(str(logo_path), width=160)
+else:
+    st.sidebar.markdown("## Spectra")  # fallback text logo or leave blank
 st.sidebar.title("Spectra")
 st.sidebar.markdown("### AI Agent Builder for Supply Chain")
 
