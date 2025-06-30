@@ -1,0 +1,11 @@
+spectra_prototype/
+├── app.py                 # Entry point
+├── pages/
+│   ├── 1_Dashboard.py
+│   ├── 2_Agent_Templates.py
+│   ├── 3_Agent_Builder.py
+│   └── 4_Run_Monitoring.py
+├── utils/
+│   └── state.py           # Session state manager
+└── assets/
+    └── spectra_logo.png   # Placeholder logo
