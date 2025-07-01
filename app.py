@@ -3,8 +3,7 @@ import json
 import pandas as pd
 from datetime import datetime
 import uuid
-import plotly.express as px
-import plotly.graph_objects as go
+import numpy as np
 
 # Configure page
 st.set_page_config(
@@ -371,7 +370,7 @@ elif page == "My Agents":
         with col4:
             st.metric("Cost Savings", "$45,200", "↗️ $8,400")
         
-        # Visualizations
+        # Visualizations using Streamlit native charts
         col_a, col_b = st.columns(2)
         
         with col_a:
@@ -383,10 +382,8 @@ elif page == "My Agents":
                 'Latency': [2.5 - (i * 0.02) + (i % 5) * 0.1 for i in range(30)]
             })
             
-            fig = px.line(performance_data, x='Date', y='Accuracy', 
-                         title='Model Performance Over Time')
-            fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
+            st.subheader("Model Performance Over Time")
+            st.line_chart(performance_data.set_index('Date')['Accuracy'])
         
         with col_b:
             # Resource utilization
@@ -395,10 +392,8 @@ elif page == "My Agents":
                 'Utilization': [75, 60, 45, 30]
             })
             
-            fig = px.bar(resource_data, x='Resource', y='Utilization',
-                        title='Cluster Resource Utilization (%)')
-            fig.update_layout(height=300)
-            st.plotly_chart(fig, use_container_width=True)
+            st.subheader("Cluster Resource Utilization (%)")
+            st.bar_chart(resource_data.set_index('Resource'))
 
 elif page == "Data Sources":
     st.header("📊 Data Source Management")
@@ -463,11 +458,12 @@ elif page == "Analytics":
     st.header("📈 Supply Chain Analytics")
     st.markdown("*Powered by Databricks SQL and real-time dashboards*")
     
-    # Create sample analytics
+    # Create sample analytics using Streamlit native charts
     col1, col2 = st.columns(2)
     
     with col1:
         # Inventory levels over time
+        st.subheader("Inventory Value Trend")
         dates = pd.date_range('2024-01-01', periods=30, freq='D')
         inventory_data = pd.DataFrame({
             'Date': dates,
@@ -475,21 +471,18 @@ elif page == "Analytics":
             'Stock_Outs': [max(0, 5 - (i%10)) for i in range(30)]
         })
         
-        fig1 = px.line(inventory_data, x='Date', y='Inventory_Value',
-                      title='Inventory Value Trend')
-        st.plotly_chart(fig1, use_container_width=True)
+        st.line_chart(inventory_data.set_index('Date')['Inventory_Value'])
     
     with col2:
         # Supplier performance
+        st.subheader("Supplier Performance Scores")
         supplier_data = pd.DataFrame({
             'Supplier': ['Supplier A', 'Supplier B', 'Supplier C', 'Supplier D'],
             'Performance_Score': [95, 87, 92, 78],
             'Risk_Level': ['Low', 'Medium', 'Low', 'High']
         })
         
-        fig2 = px.bar(supplier_data, x='Supplier', y='Performance_Score',
-                     color='Risk_Level', title='Supplier Performance Scores')
-        st.plotly_chart(fig2, use_container_width=True)
+        st.bar_chart(supplier_data.set_index('Supplier')['Performance_Score'])
     
     # Real-time KPIs
     st.subheader("⚡ Real-time KPIs")
