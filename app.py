@@ -198,20 +198,26 @@ def show_configure():
             placeholder="Describe what this agent will do"
         )
         
+        categories = ['', 'forecasting', 'inventory', 'procurement', 'logistics', 'quality', 'risk']
+        current_cat = st.session_state.agent_config.get('category', '')
+        try:
+            default_idx = categories.index(current_cat)
+        except ValueError:
+            default_idx = 0
+
         agent_category = st.selectbox(
-            "Category",
-            options=['', 'forecasting', 'inventory', 'procurement', 'logistics', 'quality', 'risk'],
+            'Category',
+            options=categories,
             format_func=lambda x: {
                 '': 'Select category',
                 'forecasting': 'Demand Forecasting',
-                'inventory': 'Inventory Management', 
+                'inventory': 'Inventory Management',
                 'procurement': 'Procurement',
                 'logistics': 'Logistics & Transportation',
                 'quality': 'Quality Management',
                 'risk': 'Risk Management'
             }.get(x, x),
-            index=0 if not st.session_state.agent_config.get('category') else 
-                  ['', 'forecasting', 'inventory', 'procurement', 'logistics', 'quality', 'risk'].index(st.session_state.agent_config.get('category', ''))
+            index=default_idx
         )
         
         submitted = st.form_submit_button("Next: Data Sources", type="primary")
