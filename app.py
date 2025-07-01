@@ -41,6 +41,12 @@ DATABRICKS_FEATURES = {
     ]
 }
 
+
+# Helper to safely pre-select only valid defaults in multiselect
+def _safe_defaults(options_list, desired_defaults):
+    return [item for item in desired_defaults if item in options_list]
+
+
 # Enhanced agent templates with Databricks capabilities
 AGENT_TEMPLATES = {
     "Intelligent Inventory Optimizer": {
@@ -182,10 +188,15 @@ if page == "Agent Builder":
         st.markdown("*Configure your data sources and Delta Lake tables*")
         
         # Data sources selection
+        # Data sources selection
         selected_sources = st.multiselect(
             "Select Data Sources",
             DATABRICKS_FEATURES["data_sources"],
-            default=template.get('data_sources', [])[:3] if agent_type != "Custom" else []
+            default=_safe_defaults(
+                DATABRICKS_FEATURES["data_sources"],
+                template.get('data_sources', [])[:3] if agent_type != "Custom" else []
+            )
+        )
         )
         
         # Delta Lake configuration
@@ -206,7 +217,11 @@ if page == "Agent Builder":
         selected_models = st.multiselect(
             "Select ML Models",
             DATABRICKS_FEATURES["ml_models"],
-            default=template.get('ml_models', [])[:2] if agent_type != "Custom" else []
+            default=_safe_defaults(
+                DATABRICKS_FEATURES["ml_models"],
+                template.get('ml_models', [])[:2] if agent_type != "Custom" else []
+            )
+        )
         )
         
         # Model configuration
